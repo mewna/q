@@ -44,8 +44,10 @@ defmodule Q do
       ]),
       event_handler: opts[:event_handler]
     }
+    Logger.info "[Q] Ready!"
     if opts[:poll] do
       Process.send_after self(), :poll, 250
+      Logger.info "[Q] Polling will start in 250ms."
     end
     {:ok, state}
   end
