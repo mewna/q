@@ -44,6 +44,9 @@ defmodule Q do
       ]),
       event_handler: opts[:event_handler]
     }
+    if opts[:poll] do
+      Process.send_after self(), :poll, 250
+    end
     {:ok, state}
   end
 

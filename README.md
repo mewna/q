@@ -11,11 +11,16 @@ for you**.
 
 ```Elixir
 %{
+  # Should be the same between all workers
   queue: "redis queue name",
+  # Connecting to redis
   host: "localhost",
   port: 6379,
   pass: "a",
+  # Used for handling events pulled from the queue
   event_handler: &MyModule.handle/1,
+  # Set this to false to prevent queue polling
+  poll: true,
 }
 ```
 
