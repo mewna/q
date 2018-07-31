@@ -63,11 +63,11 @@ defmodule Q do
     {:noreply, state}
   end
 
-  def handle_info({:queue, data}, state) when is_binary(data) do
+  def handle_cast({:queue, data}, state) when is_binary(data) do
     Redix.command state[:redix], ["RPUSH", state[:queue], data]
     {:noreply, state}
   end
-  def handle_info({:queue, data}, state) do
+  def handle_cast({:queue, data}, state) do
     Redix.command state[:redix], ["RPUSH", state[:queue], Jason.encode!(data)]
     {:noreply, state}
   end
