@@ -44,7 +44,7 @@ defmodule Q do
       ]),
       event_handler: opts[:event_handler]
     }
-    Logger.info "[Q] Ready!"
+    Logger.info "[Q] Ready on queue #{state[:queue]}!"
     if opts[:poll] do
       Process.send_after self(), :poll, 250
       Logger.info "[Q] Polling will start in 250ms."
@@ -62,11 +62,11 @@ defmodule Q do
     {:noreply, state}
   end
 
-  def handle_cast({:queue, data}, state) when is_binary(data) do
+  def handle_info({:queue, data}, state) when is_binary(data) do
     Redix.command state[:redix], ["RPUSH", state[:queue], data]
     {:noreply, state}
   end
-  def handle_cast({:queue, data}, state) do
+  def handle_info({:queue, data}, state) do
     Redix.command state[:redix], ["RPUSH", state[:queue], Jason.encode!(data)]
     {:noreply, state}
   end
