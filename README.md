@@ -11,6 +11,8 @@ for you**.
 
 ```Elixir
 %{
+  # Must be passed. Used for naming the process
+  name: :"queue-name",
   # Should be the same between all workers
   queue: "redis queue name",
   # Connecting to redis

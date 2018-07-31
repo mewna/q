@@ -10,6 +10,7 @@ defmodule Q do
   ## Configuration
 
       %{
+        name: :"queue-name",
         queue: "redis queue name",
         host: "localhost",
         port: 6379,
@@ -31,7 +32,7 @@ defmodule Q do
   require Logger
 
   def start_link(opts) do
-    GenServer.start_link __MODULE__, opts
+    GenServer.start_link __MODULE__, opts, name: opts[:name]
   end
 
   def init(opts) do
