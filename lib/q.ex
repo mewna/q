@@ -72,31 +72,18 @@ defmodule Q do
     # Pass data off to handler
     state[:event_handler].(data)
 
-    send(self(), :poll)
+    send self(), :poll
     {:noreply, state}
   end
 
   def handle_cast({:queue, data}, state) when is_binary(data) do
-    Redix.command(state[:redix], ["RPUSH", state[:queue], data])
+    Redix.command state[:redix], ["RPUSH", state[:queue], data]
     {:noreply, state}
   end
 
   def handle_cast({:queue, data}, state) do
     json = Jason.encode!(data)
-    Redix.command(state[:redix], ["RPUSH", state[:queue], json])
+    Redix.command state[:redix], ["RPUSH", state[:queue], json]
     {:noreply, state}
-  end
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Q.hello
-      :world
-
-  """
-  def hello do
-    :world
   end
 end
