@@ -80,10 +80,19 @@ defmodule Q do
     Redix.command state[:redix], ["RPUSH", state[:queue], data]
     {:noreply, state}
   end
-
   def handle_cast({:queue, data}, state) do
     json = Jason.encode!(data)
     Redix.command state[:redix], ["RPUSH", state[:queue], json]
+    {:noreply, state}
+  end
+
+  def handle_cast({:queue, data, suffix}, state) when is_binary(data) and is_binary(suffix) do
+    Redix.command state[:redix], ["RPUSH", state[:queue] <> ":" <> suffix, data]
+    {:noreply, state}
+  end
+  def handle_cast({:queue, data, suffix}, state) when is_binary(suffix) do
+    json = Jason.encode!(data)
+    Redix.command state[:redix], ["RPUSH", state[:queue] <> ":" <> suffix, json]
     {:noreply, state}
   end
 end
